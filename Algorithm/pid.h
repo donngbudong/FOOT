@@ -1,0 +1,38 @@
+#ifndef PID_H
+#define PID_H
+
+#define ABS(x)		((x>0)? (x): (-x)) 
+
+enum PID_MODE
+{
+    PID_POSITION = 0,
+    PID_DELTA
+};
+
+typedef struct
+{
+//    uint8_t mode;
+    //PID 三参数
+    float Kp;
+    float Ki;
+    float Kd;
+
+    float max_out;  //最大输出
+    float max_iout; //最大积分输出
+
+    float set;
+    float fdb;
+
+    float out;
+    float Pout;
+    float Iout;
+    float Dout;
+    float Dbuf[3];  //微分项 0最新 1上一次 2上上次
+    float error[3]; //误差项 0最新 1上一次 2上上次
+
+} pid_type_def;
+
+void PID_init(pid_type_def *pid,float KP,float KI,float KD, int max_out, int max_iout);
+float PID_calc(pid_type_def *pid, float ref, float set);
+
+#endif
